@@ -1,0 +1,16 @@
+from django.db import models
+
+class Task(models.Model):
+    STATUS_CHOICES = [
+        ('pending','Pending'),
+        ('in_progress','In Progress'),
+        ('completed','Completed'),
+        ('blocked','Blocked'),
+    ]
+    title = models.CharField(max_length=200)
+    status = models.CharField(max_length=20,choices=STATUS_CHOICES,default='pending')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+class TaskDependency(models.Model):
+    task = models.ForeignKey(Task,related_name='dependencies',on_delete=models.CASCADE)
+    depends_on = models.ForeignKey(Task,related_name='dependents',on_delete=models.CASCADE)
